@@ -1,0 +1,20 @@
+# This file populates the Overview on Charmhub.
+# See https://juju.is/docs/sdk/metadata-reference for a checklist and guidance.
+
+# The charm package name, no spaces (required)
+# See https://juju.is/docs/sdk/naming#heading--naming-charms for guidance.
+name: input-gate
+ 
+# The following metadata are human-readable and will be published prominently on Charmhub.
+
+# (Recommended)
+display-name: Input Gate
+
+# (Required)
+summary: Provides one input bit to a circuit.
+
+description: Provides one input bit to a circuit.
+
+provides:
+  output:
+    interface: bit

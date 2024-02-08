@@ -1,0 +1,29 @@
+#!/bin/bash
+
+config_changed() {
+	juju-log -l DEBUG 'Entering config-changed'
+	value=$(config-get value)
+	relids=$(relation-ids output)
+	for relid in ${relations}; do
+		relation-set -r output:${relid} --app value=${value}
+	done
+}
+
+relation_joined() {
+	relation-set -r ${JUJU_RELATION_ID} --app value=$(config-get value)
+}
+
+case ${JUJU_HOOK_NAME} in
+	"start")
+		status-set active;;
+	"config-changed")
+		config_changed;;
+	"output-relation-joined")
+		relation_joined;;
+	"install" | "leader-elected" | "update-status" | "upgrade-charm")
+		;;
+	"output-relation-created" | "output-relation-changed" | "output-relation-departed" | "output-relation-broken")
+		;;
+	*)
+		juju-log -l ERROR "Unhandled hook ${JUJU_HOOK_NAME}";;
+esac

@@ -1,0 +1,26 @@
+# This file populates the Overview on Charmhub.
+# See https://juju.is/docs/sdk/metadata-reference for a checklist and guidance.
+
+# The charm package name, no spaces (required)
+# See https://juju.is/docs/sdk/naming#heading--naming-charms for guidance.
+name: nand-gate
+ 
+# The following metadata are human-readable and will be published prominently on Charmhub.
+
+# (Recommended)
+display-name: Nand Gate
+
+# (Required)
+summary: A nand gate for a circuit.
+
+description: A nand gate for a circuit.
+
+requires:
+  input:
+    interface: bit
+    limit: 2
+    optional: false
+
+provides:
+  output:
+    interface: bit

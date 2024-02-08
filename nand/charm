@@ -1,0 +1,42 @@
+#!/bin/bash
+
+get_output_value() {
+	relids=$(relation-ids input)
+	id0=$(echo ${relids} | cut -d ':' -f 1)
+	id1=$(echo ${relids} | cut -d ':' -f 2)
+	input0=$(relation-get -r input:${id0} --app value)
+	input1=$(relation-get -r input:${id1} --app value)
+}
+
+
+output_relation_joined() {
+	relation-set -r ${JUJU_RELATION_ID} value=$(get_output_value)
+}
+
+input_changed() {
+	value=$(get_output_value)
+	relids=$(relation-ids output)
+	for relid in ${relids}; do
+		relation-set -r output:${relid} --app value=${value}
+	done
+}
+
+if [ $(relation-ids input | wc -w) -ne 2 ]; then
+	status-set blocked "Waiting for two inputs"
+	exit 0
+else
+	status-set active
+fi
+
+case ${JUJU_HOOK_NAME} in
+	"output-relation-joined")
+		output_relation_joined;;
+	"input-relation-changed")
+		input_changed;;
+	"config-changed" | "install" | "leader-elected" | "start" | "update-status")
+		;;
+	"input-relation-created" | "input-relation-joined" | "input-relation-changed")
+		;;
+	*)
+		juju-log -l ERROR "Unhandled hook ${JUJU_HOOK_NAME}";;
+esac

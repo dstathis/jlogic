@@ -1,0 +1,19 @@
+type: charm
+bases:
+  - build-on:
+    - name: ubuntu
+      channel: "22.04"
+    run-on:
+    - name: ubuntu
+      channel: "22.04"
+
+parts:
+  main-part:
+    plugin: dump
+    source: .
+    prime:
+      - LICENSE
+      - charm
+      - config.yaml
+      - dispatch
+      - metadata.yaml
